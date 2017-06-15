@@ -2,6 +2,7 @@
 <manifest package="com.ooxxmix.hlibrary"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <permission android:name="android.permission.INTERNET"/>
 
     <application

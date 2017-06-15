@@ -1,6 +1,8 @@
 package com.ooxxmix.hlibrary;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +22,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.ooxxmix.hlibrary.model.Book;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +36,9 @@ public class MainActivity extends AppCompatActivity
 
     private Gson gson;
     private bookAdapter adapter;
+
+    private HandlerThread queryThread = new HandlerThread("query");
+    private Handler queryHandler;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -47,6 +58,23 @@ public class MainActivity extends AppCompatActivity
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReferenceFromUrl("https://hlibary-cb601.firebaseio.com/");
         myRef.addChildEventListener(this);
+
+//        mainHandler = new Handler();
+        queryThread.start();
+        queryHandler = new Handler(queryThread.getLooper());
+        queryHandler.post(new Runnable() {
+            @Override public void run () {
+                try {
+                    Document doc = Jsoup.parse(new URL("http://search.books.com.tw/search/query/key/9789864761753"), 2000);
+                    Elements element = doc.select("img[class=itemcov]");
+                    String name = element.attr("alt");
+                    String image = element.attr("data-original");
+                    Log.d("!!!", name + "  " + image);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
