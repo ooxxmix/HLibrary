@@ -21,13 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.ooxxmix.hlibrary.model.Book;
+import com.ooxxmix.hlibrary.model.BooksSearcher;
+import com.ooxxmix.hlibrary.model.Parser;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,15 +60,8 @@ public class MainActivity extends AppCompatActivity
         queryHandler = new Handler(queryThread.getLooper());
         queryHandler.post(new Runnable() {
             @Override public void run () {
-                try {
-                    Document doc = Jsoup.parse(new URL("http://search.books.com.tw/search/query/key/9789864761753"), 2000);
-                    Elements element = doc.select("img[class=itemcov]");
-                    String name = element.attr("alt");
-                    String image = element.attr("data-original");
-                    Log.d("!!!", name + "  " + image);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Book book = new Parser(new BooksSearcher()).parse("97898647641364213");
+                Log.d("!!!", book.getName() + "  " + book.getImage());
             }
         });
     }
