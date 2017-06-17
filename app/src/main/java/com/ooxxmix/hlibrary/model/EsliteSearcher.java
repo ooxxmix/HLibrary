@@ -1,5 +1,9 @@
 package com.ooxxmix.hlibrary.model;
 
+import android.support.annotation.NonNull;
+
+import com.ooxxmix.hlibrary.model.bean.Book;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -14,7 +18,7 @@ public class EsliteSearcher implements Searcher {
     private final String address = "http://www.eslite.com/Search_BW.aspx?query=%s";
 
     @Override
-    public Book search (String isbn) {
+    public Book search (@NonNull String isbn) {
         try {
             Book book = new Book(isbn);
             URL url = new URL(String.format(address, isbn));
@@ -25,6 +29,9 @@ public class EsliteSearcher implements Searcher {
             return book;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
+        } catch (Book.ISBNFormatError isbnFormatError) {
+            isbnFormatError.printStackTrace();
             return null;
         }
     }

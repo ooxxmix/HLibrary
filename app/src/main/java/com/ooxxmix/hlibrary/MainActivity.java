@@ -20,7 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
-import com.ooxxmix.hlibrary.model.Book;
+import com.ooxxmix.hlibrary.model.bean.Book;
 import com.ooxxmix.hlibrary.model.BooksSearcher;
 import com.ooxxmix.hlibrary.model.Parser;
 

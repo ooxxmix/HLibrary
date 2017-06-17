@@ -2,6 +2,8 @@ package com.ooxxmix.hlibrary.model;
 
 import android.support.annotation.WorkerThread;
 
+import com.ooxxmix.hlibrary.model.bean.Book;
+
 public class Parser {
 
     private Searcher searcher;
