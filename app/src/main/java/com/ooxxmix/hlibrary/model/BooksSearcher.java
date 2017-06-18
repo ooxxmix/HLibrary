@@ -18,22 +18,14 @@ public class BooksSearcher implements Searcher {
     private final String address = "http://search.books.com.tw/search/query/key/%s";
 
     @Override
-    public Book search (@NonNull String isbn) {
-        try {
-            Book book = new Book(isbn);
-            URL url = new URL(String.format(address, isbn));
-            Document doc = Jsoup.parse(url, timeoutMillis);
-            Elements element = doc.select("img[class=itemcov]");
-            book.setName(element.attr("alt"));
-            book.setImage(element.attr("data-original"));
-            return book;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } catch (Book.ISBNFormatError isbnFormatError) {
-            isbnFormatError.printStackTrace();
-            return null;
-        }
+    public Book search (@NonNull String isbn) throws Book.ISBNFormatError, IOException {
+        Book book = new Book(isbn);
+        URL url = new URL(String.format(address, isbn));
+        Document doc = Jsoup.parse(url, timeoutMillis);
+        Elements element = doc.select("img[class=itemcov]");
+        book.setName(element.attr("alt"));
+        book.setImage(element.attr("data-original"));
+        return book;
     }
 
     @Override

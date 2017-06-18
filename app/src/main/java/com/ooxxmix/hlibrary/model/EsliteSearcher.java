@@ -18,22 +18,14 @@ public class EsliteSearcher implements Searcher {
     private final String address = "http://www.eslite.com/Search_BW.aspx?query=%s";
 
     @Override
-    public Book search (@NonNull String isbn) {
-        try {
-            Book book = new Book(isbn);
-            URL url = new URL(String.format(address, isbn));
-            Document doc = Jsoup.parse(url, timeoutMillis);
-            Elements element = doc.select("img[class=cover_img]");
-            book.setName(element.attr("alt"));
-            book.setImage(element.attr("src"));
-            return book;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } catch (Book.ISBNFormatError isbnFormatError) {
-            isbnFormatError.printStackTrace();
-            return null;
-        }
+    public Book search (@NonNull String isbn) throws Book.ISBNFormatError, IOException {
+        Book book = new Book(isbn);
+        URL url = new URL(String.format(address, isbn));
+        Document doc = Jsoup.parse(url, timeoutMillis);
+        Elements element = doc.select("img[class=cover_img]");
+        book.setName(element.attr("alt"));
+        book.setImage(element.attr("src"));
+        return book;
     }
 
     @Override public String getSourceName () {
