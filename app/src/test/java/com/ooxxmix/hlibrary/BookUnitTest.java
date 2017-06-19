@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertTrue;
 public class BookUnitTest {
 
     @Test
-    public void setISBNTest () {
+    public void setValidISBNTest () {
         List<String> isbns = new ArrayList<String>();
         //Valid ISBNs
         isbns.add("ISBN 978-0-596-52068-7");
@@ -34,8 +34,13 @@ public class BookUnitTest {
             }
             assertTrue(isPass);
         }
+    }
 
-        isbns.clear();
+    @Test
+    public void setInvalidISBNTest () {
+        List<String> isbns = new ArrayList<String>();
+
+        //Invalid ISBNs
         isbns.add("ISBN 11978-0-596-52068-7");
         isbns.add("ISBN-12: 978-0-596-52068-7");
         isbns.add("978 10 596 52068 7");

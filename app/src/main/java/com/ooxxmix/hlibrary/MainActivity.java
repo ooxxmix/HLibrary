@@ -24,6 +24,7 @@ import com.ooxxmix.hlibrary.model.bean.Book;
 import com.ooxxmix.hlibrary.model.BooksSearcher;
 import com.ooxxmix.hlibrary.model.Parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +61,15 @@ public class MainActivity extends AppCompatActivity
         queryHandler = new Handler(queryThread.getLooper());
         queryHandler.post(new Runnable() {
             @Override public void run () {
-                Book book = new Parser(new BooksSearcher()).parse("97898647641364213");
-                Log.d("!!!", book.getName() + "  " + book.getImage());
+                Book book = null;
+                try {
+                    book = new Parser(new BooksSearcher()).parse("9780596520687");
+                    Log.d("!!!", book.getName() + "  " + book.getImage());
+                } catch (Book.ISBNFormatError isbnFormatError) {
+                    Log.d("!!!", "ISBN格式錯誤");
+                } catch (IOException e) {
+                    Log.d("!!!", "查無資料");
+                }
             }
         });
     }

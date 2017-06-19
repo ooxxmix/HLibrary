@@ -1,8 +1,11 @@
 package com.ooxxmix.hlibrary.model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 
 import com.ooxxmix.hlibrary.model.bean.Book;
+
+import java.io.IOException;
 
 public class Parser {
 
@@ -17,11 +20,8 @@ public class Parser {
     }
 
     @WorkerThread
-    public Book parse (String isbn) {
-        // add isbn checker
-        if (null == isbn) throw new NullPointerException();
-        Book b = searcher.search(isbn);
-        if (b == null) throw new NullPointerException();
-        else return b;
+    public Book parse (@NonNull String isbn) throws Book.ISBNFormatError, IOException {
+        if (null == searcher) throw new NullPointerException();
+        return searcher.search(isbn);
     }
 }

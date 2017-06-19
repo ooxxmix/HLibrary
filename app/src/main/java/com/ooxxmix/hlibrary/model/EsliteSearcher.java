@@ -28,7 +28,8 @@ public class EsliteSearcher implements Searcher {
         return book;
     }
 
-    @Override public String getSourceName () {
+    @Override
+    public String getSourceName () {
         return sourceName;
     }
 
