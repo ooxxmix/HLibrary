@@ -1,15 +1,20 @@
 package com.ooxxmix.hlibrary;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -20,16 +25,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
-import com.ooxxmix.hlibrary.model.bean.Book;
 import com.ooxxmix.hlibrary.model.BooksSearcher;
 import com.ooxxmix.hlibrary.model.Parser;
+import com.ooxxmix.hlibrary.model.bean.Book;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements ChildEventListener {
+        implements View.OnClickListener, ChildEventListener {
 
     private Gson gson;
     private bookAdapter adapter;
@@ -45,6 +50,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.scan);
         RecyclerView list = (RecyclerView) findViewById(R.id.list);
+
+        fab.setOnClickListener(this);
 
         list.setLayoutManager(new LinearLayoutManager(this));
         adapter = new bookAdapter();
@@ -75,6 +82,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem search = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        return true;
+    }
+
+
+    @Override
     public void onChildAdded (DataSnapshot dataSnapshot, String s) {
         Log.d("added", dataSnapshot.getValue().toString());
         adapter.addItem(gson.fromJson(dataSnapshot.getValue().toString(), Book.class));
@@ -98,6 +116,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onCancelled (DatabaseError databaseError) {
         Log.d("cancellid", databaseError.toString());
+    }
+
+    @Override
+    public void onClick (View v) {
+        startActivity(new Intent(this, ScanActivity.class));
     }
 
     class bookAdapter extends RecyclerView.Adapter<bookHolder> {
